@@ -25,47 +25,6 @@ imageGallery.insertAdjacentHTML('beforeend', cardsMarkup);
 
 imageGallery.addEventListener('click', onCurrentImageClick);
 
-//! Дивись альтернативний код нижче
-// function onCurrentImageClick(evt) {
-//   evt.preventDefault();
-
-//   if (evt.target.nodeName !== 'IMG') {
-//     return;
-//   }
-
-//   const currentImageLink = evt.target.dataset.source;
-//   const marcup = `<img src="${currentImageLink}">`;
-
-//   const instance = basicLightbox.create(
-//     marcup,
-//     { onShow: () => onOpenInstance() },
-//     { onClose: () => onCloseInstance() }
-//   );
-
-//   instance.show();
-
-//   function onOpenInstance() {
-//     window.addEventListener('keydown', onEscKeyPress);
-//   }
-
-//   function onCloseInstance() {
-//     window.removeEventListener('keydown', onEscKeyPress); //! Після закриття модалки мишкою EventListener не знімається поки не буде натиснуто "Escape"(((
-//     instance.close();
-//   }
-
-//   function onEscKeyPress(evt) {
-//     const ESC_KEY_CODE = 'Escape';
-//     const isEscKey = evt.code === ESC_KEY_CODE;
-
-//     if (isEscKey) {
-//       onCloseInstance();
-//     }
-//   }
-// }
-
-console.log(galleryItems);
-
-//!Альтернативний варіант
 function onCurrentImageClick(evt) {
   evt.preventDefault();
 
@@ -76,18 +35,19 @@ function onCurrentImageClick(evt) {
   const currentImageLink = evt.target.dataset.source;
   const marcup = `<img src="${currentImageLink}">`;
 
-  const instance = basicLightbox.create(marcup);
+  const instance = basicLightbox.create(marcup, {
+    onShow: () => onOpenInstance(),
+    onClose: () => onCloseInstance(),
+  });
 
-  instance.show(onOpenInstance());
+  instance.show();
 
   function onOpenInstance() {
     window.addEventListener('keydown', onEscKeyPress);
-    console.log('addEventListener'); //TODO: delete
   }
 
   function onCloseInstance() {
-    window.removeEventListener('keydown', onEscKeyPress); //! Після закриття модалки мишкою EventListener не знімається поки не буде натиснуто "Escape"(((
-    console.log('removeEventListener'); //TODO: delete
+    window.removeEventListener('keydown', onEscKeyPress);
   }
 
   function onEscKeyPress(evt) {
@@ -95,8 +55,9 @@ function onCurrentImageClick(evt) {
     const isEscKey = evt.code === ESC_KEY_CODE;
 
     if (isEscKey) {
-      instance.close(onCloseInstance());
+      instance.close();
     }
-    console.log(evt.code); //TODO: delete
   }
 }
+
+console.log(galleryItems);
